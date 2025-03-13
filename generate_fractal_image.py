@@ -13,11 +13,12 @@ def mandelbrot(c, max_iter):
         n += 1
     return n, z
 
-def generate_fractal_image(file_path, target_size_kb):
+def generate_fractal_image(file_path, target_size_kb, image_format='jpeg'):
     """
     生成带有Mandelbrot分形图案的图片，精确控制文件大小
     :param file_path: 图片保存路径
     :param target_size_kb: 目标文件大小（单位KB）
+    :param image_format: 图片格式，支持jpeg, png, gif, webp
     """
     width = 1024
     height = 768
@@ -78,7 +79,7 @@ def generate_fractal_image(file_path, target_size_kb):
             resized_width = int(width * current_resize)
             resized_height = int(height * current_resize)
             resized_img = img.resize((resized_width, resized_height))
-            resized_img.save(temp_path, quality=current_quality, optimize=True)
+            resized_img.save(temp_path, format=image_format, quality=current_quality, optimize=True)
 
         file_size = os.path.getsize(temp_path) / 1024
         size_diff = abs(file_size - target_size_kb)
@@ -119,11 +120,11 @@ def generate_fractal_image(file_path, target_size_kb):
     final_width = int(width * final_resize)
     final_height = int(height * final_resize)
     final_img = img.resize((final_width, final_height))
-    final_img.save(file_path, quality=final_quality, optimize=True)
+    final_img.save(file_path, format=image_format, quality=final_quality, optimize=True)
     
     # 清理最后的临时文件
     if temp_path and os.path.exists(temp_path):
         os.unlink(temp_path)
 
 
-generate_fractal_image('fractal_image_100k_5.jpg', 100)
+generate_fractal_image('100K.webp', 100, 'webp')
